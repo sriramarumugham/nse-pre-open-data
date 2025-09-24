@@ -1,0 +1,14 @@
+version: '3.8'
+
+services:
+  scraper:
+    build:
+      context: .
+      dockerfile: Dockerfile.vnc
+    ports:
+      - "6080:6080"
+    environment:
+      - DISPLAY=:99
+    volumes:
+      - .:/app
+    command: /usr/bin/supervisord -c /etc/supervisor/conf.d/supervisord.conf

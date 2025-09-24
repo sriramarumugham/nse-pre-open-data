@@ -1,0 +1,26 @@
+{
+  "name": "NSE Scraper with Browser View",
+  "dockerFile": "../Dockerfile.vnc",
+
+  "forwardPorts": [6080],
+
+  "portsAttributes": {
+    "6080": {
+      "label": "noVNC Browser View",
+      "onAutoForward": "openPreview"
+    }
+  },
+
+  "postCreateCommand": "npm install",
+
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "dbaeumer.vscode-eslint",
+        "esbenp.prettier-vscode"
+      ]
+    }
+  },
+
+  "remoteUser": "root"
+}

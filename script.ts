@@ -34,12 +34,12 @@ async function run() {
   try {
     console.log(`📈 Navigating to ${TARGET_URL}`);
     await page.goto(TARGET_URL, {
-      waitUntil: 'networkidle',
-      timeout: 60000
+      waitUntil: 'domcontentloaded',
+      timeout: 30000
     });
 
     console.log("⏳ Waiting for page to load completely...");
-    await page.waitForTimeout(5000);
+    await page.waitForTimeout(8000);
 
     console.log("📸 Taking initial screenshot...");
     await page.screenshot({ path: SCREENSHOT_PATH, fullPage: true });
@@ -52,7 +52,7 @@ async function run() {
 
     try {
       // Wait for the dropdown to be available
-      await page.waitForSelector('#sel-Pre-Open-Market', { timeout: 10000 });
+      await page.waitForSelector('#sel-Pre-Open-Market', { timeout: 15000 });
 
       console.log("📋 Found Category dropdown, selecting 'All'...");
 

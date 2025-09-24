@@ -1,10 +1,64 @@
 import { chromium } from "playwright";
 import fs from "fs";
 import path from "path";
+import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3";
+import dotenv from "dotenv";
+
+// Load environment variables from .env file
+dotenv.config();
 
 const TARGET_URL = "https://www.nseindia.com/market-data/pre-open-market-cm-and-emerge-market";
 const SCREENSHOT_PATH = "./screenshots/pre-open-market.png";
 const DOWNLOADS_PATH = "./downloads";
+
+// R2 Configuration
+const R2_ENDPOINT = "https://72b45687d5810fd7a90a1df8263af6d3.r2.cloudflarestorage.com";
+const R2_BUCKET = process.env.R2_BUCKET_NAME || "nse-data";
+
+// Initialize R2 Client
+const r2Client = new S3Client({
+  region: 'auto',
+  endpoint: R2_ENDPOINT,
+  credentials: {
+    accessKeyId: process.env.R2_ACCESS_KEY_ID || '',
+    secretAccessKey: process.env.R2_SECRET_ACCESS_KEY || '',
+  },
+});
+
+async function uploadToR2(filePath: string, fileName: string): Promise<boolean> {
+  try {
+    if (!process.env.R2_ACCESS_KEY_ID || !process.env.R2_SECRET_ACCESS_KEY) {
+      console.log("⚠️  R2 credentials not found - skipping upload");
+      return false;
+    }
+
+    console.log(`☁️  Uploading ${fileName} to Cloudflare R2...`);
+
+    const fileContent = fs.readFileSync(filePath);
+    const timestamp = new Date().toISOString().split('T')[0]; // YYYY-MM-DD
+    const key = `nse-preopen/${timestamp}/${fileName}`;
+
+    const command = new PutObjectCommand({
+      Bucket: R2_BUCKET,
+      Key: key,
+      Body: fileContent,
+      ContentType: fileName.endsWith('.csv') ? 'text/csv' : 'application/octet-stream',
+      Metadata: {
+        'source': 'nse-scraper',
+        'scraped-at': new Date().toISOString(),
+        'file-size': fileContent.length.toString()
+      }
+    });
+
+    await r2Client.send(command);
+    console.log(`✅ Successfully uploaded to R2: ${key}`);
+    return true;
+
+  } catch (error: any) {
+    console.error(`❌ Failed to upload to R2:`, error.message);
+    return false;
+  }
+}
 
 async function run() {
   // Ensure folders exist
@@ -90,6 +144,10 @@ async function run() {
         await download.saveAs(downloadPath);
 
         console.log(`✅ CSV file downloaded to: ${downloadPath}`);
+
+        // Upload CSV to Cloudflare R2
+        const fileName = download.suggestedFilename() || `pre-open-data-${Date.now()}.csv`;
+        await uploadToR2(downloadPath, fileName);
 
         // Take screenshot after download
         await page.screenshot({ path: "./screenshots/after-download.png", fullPage: true });

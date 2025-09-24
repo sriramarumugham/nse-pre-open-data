@@ -1,17 +1,26 @@
 {
-  "name": "node-scraper",
+  "name": "nse-scraper-headed",
   "version": "1.0.0",
   "type": "module",
-  "main": "index.js",
   "scripts": {
-    "start": "node index.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "tsx script.ts",
+    "dev": "tsx script.ts"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "description": "",
   "dependencies": {
-    "playwright": "^1.55.1"
-  }
+    "playwright": "^1.44.0"
+  },
+  "devDependencies": {
+    "@types/node": "^24.5.2",
+    "tsx": "^4.7.0",
+    "typescript": "^5.2.2"
+  },
+  "description": "NSE India scraper with headed mode using Playwright",
+  "keywords": [
+    "nse",
+    "scraper",
+    "playwright",
+    "headed"
+  ],
+  "author": "",
+  "license": "MIT"
 }

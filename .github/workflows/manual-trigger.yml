@@ -1,0 +1,44 @@
+name: Manual NSE Scraper Test
+
+on:
+  workflow_dispatch:
+
+jobs:
+  test-scraper:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install system dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y xvfb libnss3 libatk1.0-0 libatk-bridge2.0-0 libcups2 \
+          libxss1 libxcomposite1 libxdamage1 libxrandr2 libgbm1 libgtk-3-0 \
+          libdrm2 libxkbcommon0 libxfixes3 libasound2 fonts-liberation
+
+      - name: Install Playwright browsers
+        run: npx playwright install chromium --with-deps
+
+      - name: Run NSE scraper (Test)
+        run: |
+          echo "🧪 Testing NSE scraper..."
+          xvfb-run --server-args="-screen 0 1920x1080x24" npm start
+
+      - name: Upload test results
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: test-results-${{ github.run_number }}
+          path: screenshots/
+          retention-days: 7

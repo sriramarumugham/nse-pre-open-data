@@ -1,0 +1,58 @@
+name: Daily NSE Scraper
+
+on:
+  # Manual trigger
+  workflow_dispatch:
+
+  # Daily at 9:10 AM IST (3:40 AM UTC)
+  schedule:
+    - cron: '40 3 * * *'
+
+jobs:
+  scrape-nse:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install system dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y xvfb libnss3 libatk1.0-0 libatk-bridge2.0-0 libcups2 \
+          libxss1 libxcomposite1 libxdamage1 libxrandr2 libgbm1 libgtk-3-0 \
+          libdrm2 libxkbcommon0 libxfixes3 libasound2 fonts-liberation
+
+      - name: Install Playwright browsers
+        run: npx playwright install chromium --with-deps
+
+      - name: Run NSE scraper
+        run: |
+          xvfb-run --server-args="-screen 0 1920x1080x24" npm start
+
+      - name: Upload screenshots
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: nse-screenshots-${{ github.run_number }}
+          path: screenshots/
+          retention-days: 30
+
+      - name: Upload logs
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: nse-logs-${{ github.run_number }}
+          path: |
+            *.log
+            *.txt
+          retention-days: 7

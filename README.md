@@ -1,43 +1,59 @@
 # NSE Scraper - Headed Mode
 
+Automated NSE India scraper using Playwright with headed mode for bypassing bot protection.
+
 ## 🚀 Quick Start
 
-### Local (See Browser)
+### Local Development
 ```bash
 npm install
-node index.js
+npm start
 ```
 
-### Docker (Virtual Display)
+### Manual Test
 ```bash
-docker build -t nse-scraper .
-docker run --rm nse-scraper
+npm run dev
 ```
 
-### Docker with VNC (See Browser via Web)
-```bash
-docker-compose up
-# Open http://localhost:6080
-# VNC Password: password
-```
+## 📅 Automated Scheduling
 
-## 📦 Free Cloud Deployment
+### Daily 9 AM IST
+Automatically runs every day at 9:00 AM IST via GitHub Actions.
 
-### GitHub Codespaces
-- Push to GitHub → Open in Codespaces
-- Auto-uses `.devcontainer/` config
-- Browser view at port 6080
-- Free: 120 core-hours/month
+### Manual Trigger
+1. Go to your GitHub repo → **Actions** tab
+2. Select **"Manual NSE Scraper Test"**
+3. Click **"Run workflow"**
 
-### Gitpod
-- Push to GitHub → Open with `gitpod.io/#your-repo`
-- Uses `.gitpod.yml` config
-- Browser preview auto-opens
-- Free: 50 hours/month
+## 🎯 Features
 
-## 📁 Files
+- ✅ **Headed mode** - Bypasses NSE bot protection
+- ✅ **TypeScript** - Type-safe development
+- ✅ **Screenshots** - Visual proof of execution
+- ✅ **GitHub Actions** - Free automated scheduling
+- ✅ **Error handling** - Robust failure recovery
 
-- `index.js` - Scraper (headed mode)
-- `Dockerfile` - Basic Xvfb setup
-- `Dockerfile.vnc` - VNC web viewer setup
-- `docker-compose.yml` - Local VNC testing
+## 📊 Output
+
+- Console logs with timestamps
+- Screenshots saved to `./screenshots/`
+- Page title and URL extraction
+- Success/failure status
+
+## 🛠️ Files
+
+- `script.ts` - Main scraper logic
+- `package.json` - Dependencies and scripts
+- `tsconfig.json` - TypeScript configuration
+- `.github/workflows/` - GitHub Actions automation
+
+## 📈 Usage
+
+The scraper will:
+1. Launch Chrome in headed mode
+2. Navigate to NSE India
+3. Take full-page screenshot
+4. Extract page information
+5. Log results with timestamps
+
+Perfect for daily market data collection! 🚀

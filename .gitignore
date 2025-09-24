@@ -46,11 +46,13 @@ jspm_packages/
 # dotenv environment variables file
 .env
 
-# Screenshots and logs
-*.png
-*.jpg
-*.jpeg
-*.gif
+# Screenshots and logs (keep directories)
+screenshots/*.png
+screenshots/*.jpg
+screenshots/*.jpeg
+screenshots/*.gif
+downloads/*.csv
+downloads/*.xlsx
 *.log
 
 # OS files

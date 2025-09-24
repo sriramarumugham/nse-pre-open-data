@@ -15,7 +15,7 @@ async function run() {
   console.log("🚀 Launching browser in headed mode...");
 
   const browser = await chromium.launch({
-    headless: false, // headed mode
+    headless: false, // Always headed mode
     args: [
       '--disable-blink-features=AutomationControlled',
       '--disable-features=site-per-process',

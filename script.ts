@@ -11,8 +11,8 @@ const TARGET_URL = "https://www.nseindia.com/market-data/pre-open-market-cm-and-
 const SCREENSHOT_PATH = "./screenshots/pre-open-market.png";
 const DOWNLOADS_PATH = "./downloads";
 
-// R2 Configuration
-const R2_ENDPOINT = "https://72b45687d5810fd7a90a1df8263af6d3.r2.cloudflarestorage.com";
+// R2 Configuration from environment variables
+const R2_ENDPOINT = process.env.R2_ENDPOINT || "https://72b45687d5810fd7a90a1df8263af6d3.r2.cloudflarestorage.com";
 const R2_BUCKET = process.env.R2_BUCKET_NAME || "nse-data";
 
 // Initialize R2 Client
@@ -35,16 +35,17 @@ async function uploadToR2(filePath: string, fileName: string): Promise<boolean> 
     console.log(`☁️  Uploading ${fileName} to Cloudflare R2...`);
 
     const fileContent = fs.readFileSync(filePath);
-    const timestamp = new Date().toISOString().split('T')[0]; // YYYY-MM-DD
-    const key = `nse-preopen/${timestamp}/${fileName}`;
+    const timestamp = new Date().toISOString().split('T')[0]; // YYYY-MM-DD format
+    const key = `pre-open-market/${timestamp}.csv`;
 
     const command = new PutObjectCommand({
       Bucket: R2_BUCKET,
       Key: key,
       Body: fileContent,
-      ContentType: fileName.endsWith('.csv') ? 'text/csv' : 'application/octet-stream',
+      ContentType: 'text/csv',
       Metadata: {
         'source': 'nse-scraper',
+        'original-filename': fileName,
         'scraped-at': new Date().toISOString(),
         'file-size': fileContent.length.toString()
       }
@@ -147,7 +148,17 @@ async function run() {
 
         // Upload CSV to Cloudflare R2
         const fileName = download.suggestedFilename() || `pre-open-data-${Date.now()}.csv`;
-        await uploadToR2(downloadPath, fileName);
+        const uploadSuccess = await uploadToR2(downloadPath, fileName);
+
+        // Delete local file after successful upload
+        if (uploadSuccess) {
+          try {
+            fs.unlinkSync(downloadPath);
+            console.log(`🗑️  Deleted local file: ${fileName}`);
+          } catch (deleteError) {
+            console.log(`⚠️  Could not delete local file: ${deleteError}`);
+          }
+        }
 
         // Take screenshot after download
         await page.screenshot({ path: "./screenshots/after-download.png", fullPage: true });

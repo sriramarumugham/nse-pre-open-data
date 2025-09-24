@@ -35,5 +35,7 @@ jobs:
         if: always()
         with:
           name: test-results-${{ github.run_number }}
-          path: screenshots/
+          path: |
+            screenshots/
+            downloads/
           retention-days: 7

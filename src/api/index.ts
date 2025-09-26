@@ -242,22 +242,7 @@ app.doc("/doc", {
     description: `
 
 
-This API provides access to NSE (National Stock Exchange) pre-open market data stored in Cloudflare R2.
 
-## 🚀 Features
-- **Public Access**: No authentication required
-- **Rate Limited**: 30 requests per minute per IP using Durable Objects
-- **Paginated Results**: Efficient data retrieval with pagination
-- **CSV Format**: Downloads original CSV files from NSE
-- **CORS Enabled**: Works with web applications
-- **Real-time Data**: Data scraped daily from NSE official website
-
-
-
-## 🔒 Rate Limiting
-- **Limit**: 30 requests per minute per IP address
-- **Implementation**: Cloudflare Durable Objects for distributed rate limiting
-- **Response**: Returns 429 status when limit exceeded
 
 ## 📝 Example Usage
 

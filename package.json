@@ -3,18 +3,27 @@
   "version": "1.0.0",
   "type": "module",
   "scripts": {
-    "start": "tsx script.ts",
-    "dev": "tsx script.ts"
+    "scraper": "tsx script.ts",
+    "dev:api": "wrangler dev",
+    "deploy:api": "wrangler deploy",
+    "tail:api": "wrangler tail"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.895.0",
+    "@aws-sdk/s3-request-presigner": "^3.895.0",
+    "@hono/swagger-ui": "^0.5.2",
+    "@hono/zod-openapi": "^1.1.3",
     "dotenv": "^17.2.2",
-    "playwright": "^1.44.0"
+    "hono": "^4.9.8",
+    "playwright": "^1.44.0",
+    "zod": "^4.1.11"
   },
   "devDependencies": {
+    "@cloudflare/workers-types": "^4.20250924.0",
     "@types/node": "^24.5.2",
     "tsx": "^4.7.0",
-    "typescript": "^5.2.2"
+    "typescript": "^5.2.2",
+    "wrangler": "^4.39.0"
   },
   "description": "NSE India scraper with headed mode using Playwright",
   "keywords": [

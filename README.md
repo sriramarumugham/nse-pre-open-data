@@ -1,59 +1,34 @@
-# NSE Scraper - Headed Mode
+# NSE Scraper - TLDR
 
-Automated NSE India scraper using Playwright with headed mode for bypassing bot protection.
+**What:** Automated scraper for NSE India using Playwright (headed mode to bypass bot protection)
 
-## 🚀 Quick Start
+**Quick Start:**
 
-### Local Development
 ```bash
 npm install
 npm start
 ```
 
-### Manual Test
-```bash
-npm run dev
-```
+**Schedule:** Runs daily at 9.10 AM IST via GitHub Actions (or trigger manually in Actions tab)
 
-## 📅 Automated Scheduling
+**Output:** Screenshots + console logs in `./screenshots/`
 
-### Daily 9 AM IST
-Automatically runs every day at 9:00 AM IST via GitHub Actions.
+**Key Files:** `script.ts` (main logic), `.github/workflows/` (automation)
 
-### Manual Trigger
-1. Go to your GitHub repo → **Actions** tab
-2. Select **"Manual NSE Scraper Test"**
-3. Click **"Run workflow"**
+## API Endpoints (Cloudflare Workers)
 
-## 🎯 Features
+**Base URL:** `https://your-api-domain.workers.dev`
 
-- ✅ **Headed mode** - Bypasses NSE bot protection
-- ✅ **TypeScript** - Type-safe development
-- ✅ **Screenshots** - Visual proof of execution
-- ✅ **GitHub Actions** - Free automated scheduling
-- ✅ **Error handling** - Robust failure recovery
+**Available Endpoints:**
 
-## 📊 Output
+1. **List Historic Dates** - `GET /api/dates?page=1&limit=10`
 
-- Console logs with timestamps
-- Screenshots saved to `./screenshots/`
-- Page title and URL extraction
-- Success/failure status
+   - Returns paginated list of available dates with data
+   - Rate limited: 30 requests/minute per IP
 
-## 🛠️ Files
+2. **Download CSV** - `GET /api/download/{date}`
+   - Example: `/api/download/2024-09-24`
+   - Returns CSV file with pre-open market data for that date
+   - Format: Stock symbols, prices, bid/ask data, market indicators
 
-- `script.ts` - Main scraper logic
-- `package.json` - Dependencies and scripts
-- `tsconfig.json` - TypeScript configuration
-- `.github/workflows/` - GitHub Actions automation
-
-## 📈 Usage
-
-The scraper will:
-1. Launch Chrome in headed mode
-2. Navigate to NSE India
-3. Take full-page screenshot
-4. Extract page information
-5. Log results with timestamps
-
-Perfect for daily market data collection! 🚀
+**API Docs:** Visit base URL for interactive Swagger UI

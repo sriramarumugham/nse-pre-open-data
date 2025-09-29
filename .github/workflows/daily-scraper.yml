@@ -37,7 +37,7 @@ jobs:
           R2_BUCKET_NAME: ${{ secrets.R2_BUCKET_NAME }}
           R2_ENDPOINT: ${{ secrets.R2_ENDPOINT }}
         run: |
-          xvfb-run --server-args="-screen 0 1920x1080x24" npm start
+          xvfb-run --server-args="-screen 0 1920x1080x24" npm scraper
 
       - name: Upload results
         uses: actions/upload-artifact@v4

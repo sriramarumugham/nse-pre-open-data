@@ -1,6 +1,6 @@
 # NSE Scraper - TLDR
 
-...
+.....
 **What:** Automated scraper for NSE India using Playwright (headed mode to bypass bot protection)
 
 **Quick Start:**

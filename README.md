@@ -32,4 +32,4 @@ npm start
    - Returns CSV file with pre-open market data for that date
    - Format: Stock symbols, prices, bid/ask data, market indicators
 
-**API Docs:** Visit base URL for interactive Swagger UI
+**API Docs:** Visit base URL for interactive Swagger UI.
